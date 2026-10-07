@@ -1,20 +1,21 @@
-"""Centralised logging configuration."""
+"""Centralised logging configuration.
+
+The logger is deliberately minimal: it does not attach its own handlers
+and does not disable propagation.  This lets pytest's ``log_cli``
+options in ``pytest.ini`` take effect so that HTTP logs are visible
+in the console during a test run.
+"""
 
 import logging
-import sys
-
-_LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 def get_logger(name: str) -> logging.Logger:
-    logger = logging.getLogger(name)
-    if logger.handlers:
-        return logger
+    """Return a logger that propagates to the root logger.
 
-    logger.setLevel(logging.INFO)
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(logging.Formatter(_LOG_FORMAT, _DATE_FORMAT))
-    logger.addHandler(handler)
-    logger.propagate = False
+    Pytest configures the root logger via ``log_cli``, so we must not
+    disable propagation and must not add our own handler here — otherwise
+    the logs would be swallowed or duplicated.
+    """
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
     return logger

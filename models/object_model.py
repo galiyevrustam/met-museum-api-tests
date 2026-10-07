@@ -41,24 +41,32 @@ class Measurement(BaseModel):
 class ArtObject(BaseModel):
     """A record for an object returned by /objects/{objectID}.
 
-    ``extra="allow"`` lets the model accept any future fields without
-    breaking validation.
+    The fields marked as required are guaranteed to be present on every
+    valid object returned by the API. All other fields are Optional
+    because the Met returns ``null`` or ``""`` for many attributes
+    (empty dynasty, missing image, etc.).
     """
 
     model_config = ConfigDict(extra="allow")
 
+    # --- Guaranteed fields (present on every object) ---
     objectID: int = Field(..., ge=0)
-    isHighlight: Optional[bool] = None
-    accessionNumber: Optional[str] = None
+    isHighlight: bool
+    isPublicDomain: bool
+    department: str
+    title: str
+    objectURL: str
+    accessionNumber: str
+    objectBeginDate: int
+    objectEndDate: int
+
+    # --- Optional fields (may be missing or null) ---
     accessionYear: Optional[str] = None
-    isPublicDomain: Optional[bool] = None
-    primaryImage: Optional[str] = ""
-    primaryImageSmall: Optional[str] = ""
-    additionalImages: Optional[List[str]] = Field(default_factory=list)
-    constituents: Optional[List[Constituent]] = Field(default_factory=list)
-    department: Optional[str] = None
+    primaryImage: Optional[str] = None
+    primaryImageSmall: Optional[str] = None
+    additionalImages: Optional[List[str]] = None
+    constituents: Optional[List[Constituent]] = None
     objectName: Optional[str] = None
-    title: Optional[str] = None
     culture: Optional[str] = None
     period: Optional[str] = None
     dynasty: Optional[str] = None
@@ -77,12 +85,10 @@ class ArtObject(BaseModel):
     artistWikidata_URL: Optional[str] = None
     artistULAN_URL: Optional[str] = None
     objectDate: Optional[str] = None
-    objectBeginDate: Optional[int] = None
-    objectEndDate: Optional[int] = None
     medium: Optional[str] = None
     dimensions: Optional[str] = None
     dimensionsParsed: Optional[list] = None
-    measurements: Optional[List[Measurement]] = Field(default_factory=list)
+    measurements: Optional[List[Measurement]] = None
     creditLine: Optional[str] = None
     geographyType: Optional[str] = None
     city: Optional[str] = None
@@ -100,8 +106,7 @@ class ArtObject(BaseModel):
     linkResource: Optional[str] = None
     metadataDate: Optional[str] = None
     repository: Optional[str] = None
-    objectURL: Optional[str] = None
-    tags: Optional[List[Tag]] = Field(default_factory=list)
+    tags: Optional[List[Tag]] = None
     objectWikidata_URL: Optional[str] = None
     isTimelineWork: Optional[bool] = None
     GalleryNumber: Optional[str] = None

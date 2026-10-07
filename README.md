@@ -9,8 +9,7 @@ built with Python, Pytest and Pydantic v2.
 - `GET /objects` — bulk enumeration and department filtering.
 - `GET /v1.1/search` — keyword search, filters, pagination (offset/limit).
 - `GET /search` (deprecated v1) — still works until 2026-10-01.
-- `GET /departments` — list shape, unique ids, usable as filter.
-
+- `GET /departments` — list shape, unique positive ids.
 ## Install
 
 ```bash

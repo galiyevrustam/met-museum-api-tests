@@ -1,18 +1,30 @@
-# Met Museum API Tests
+# Тесты для API Музея Метрополитен
 
-Automated tests for the [Metropolitan Museum of Art Collection API](https://metmuseum.github.io)
-built with Python, Pytest and Pydantic v2.
+Автоматизированные тесты для [Metropolitan Museum of Art Collection API](https://metmuseum.github.io),
+написанные на Python с использованием **Pytest** и **Pydantic v2**.
 
-## What is covered
+## Что покрыто тестами
 
-- `GET /objects/{objectID}` — valid & invalid ids, schema validation.
-- `GET /objects` — bulk enumeration and department filtering.
-- `GET /v1.1/search` — keyword search, filters, pagination (offset/limit).
-- `GET /search` (deprecated v1) — still works until 2026-10-01.
-- `GET /departments` — list shape, unique positive ids.
-## Install
+- `GET /objects/{objectID}` — получение объекта по ID, валидация схемы,
+  проверка 404 для несуществующих ID, консистентность дат создания.
+- `GET /objects` — массовое получение ID объектов, фильтрация по отделу.
+- `GET /v1.1/search` — поиск по ключевому слову, все документированные
+  фильтры, пагинация (`offset` / `limit`), потолок в 10 000 результатов,
+  консистентность `total` между страницами.
+- `GET /search` (устаревший v1) — одна проверка, что эндпоинт ещё жив
+  (будет отключён 1 октября 2026).
+- `GET /departments` — структура ответа, уникальные положительные ID.
+
+## Требования
+
+- Python 3.10+
+- Зависимости из `requirements.txt`
+
+## Установка
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+# Windows:
+.venv\Scripts\activate
+
 pip install -r requirements.txt
